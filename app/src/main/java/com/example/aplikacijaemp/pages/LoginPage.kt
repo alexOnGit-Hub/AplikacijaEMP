@@ -10,9 +10,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -58,6 +56,8 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
 
     val authState = authViewModel.authState.observeAsState()
     val context = LocalContext.current
+
+
 
     LaunchedEffect(authState.value) {
         when(authState.value){
