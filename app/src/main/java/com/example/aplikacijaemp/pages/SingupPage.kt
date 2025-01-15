@@ -29,43 +29,37 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.navArgument
 import com.example.aplikacijaemp.AuthState
 import com.example.aplikacijaemp.AuthViewModel
 import com.example.aplikacijaemp.R
 
-//https://console.firebase.google.com/u/0/project/fir-authapp-60ad0/authentication/users
-
 @Composable
-fun SingupPage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
-    var email by remember {
-        mutableStateOf("")
-    }
+fun SignupPage(
+    modifier: Modifier = Modifier,
+    navController: NavController,
+    authViewModel: AuthViewModel
+) {
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
+    var passwordVisibility by remember { mutableStateOf(false) }
 
-    var password by remember {
-        mutableStateOf("")
-    }
-
-    var password2 by remember {
-        mutableStateOf("")
-    }
-
-    var passwordVisibility by remember {
-        mutableStateOf(false)
-    }
-
-    val authState = authViewModel.authState.observeAsState()
+    val authState by authViewModel.authState.observeAsState()
     val context = LocalContext.current
 
-    LaunchedEffect(authState.value) {
-        when(authState.value){
-            is AuthState.Authenticated -> navController.navigate("home")
-            is AuthState.Error -> Toast.makeText(context, (authState.value as AuthState.Error).message, Toast.LENGTH_SHORT).show()
+    LaunchedEffect(authState) {
+        when (val state = authState) {
+            is AuthState.Authenticated -> {
+                navController.navigate("home")
+            }
+            is AuthState.Error -> {
+                Toast.makeText(context, state.message, Toast.LENGTH_SHORT).show()
+            }
             else -> Unit
         }
     }
 
-    val icon = if(passwordVisibility)
+    val icon = if (passwordVisibility)
         painterResource(id = R.drawable.baseline_visibility_24)
     else
         painterResource(id = R.drawable.baseline_visibility_off_24)
@@ -81,12 +75,8 @@ fun SingupPage(modifier: Modifier = Modifier, navController: NavController, auth
 
         OutlinedTextField(
             value = email,
-            onValueChange = {
-                email = it
-            },
-            label = {
-                Text(text = "Email")
-            },
+            onValueChange = { email = it },
+            label = { Text(text = "Email") },
             trailingIcon = {
                 Icon(
                     painter = painterResource(id = R.drawable.baseline_email_24),
@@ -99,69 +89,59 @@ fun SingupPage(modifier: Modifier = Modifier, navController: NavController, auth
 
         OutlinedTextField(
             value = password,
-            onValueChange = {
-                password = it
-            },
-            label = {
-                Text(text = "Password")
-            },
+            onValueChange = { password = it },
+            label = { Text(text = "Password") },
             trailingIcon = {
-                IconButton(onClick = {
-                    passwordVisibility = !passwordVisibility
-                }) {
+                IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
                     Icon(
                         painter = icon,
-                        contentDescription = "Visibility Icon"
+                        contentDescription = "Toggle Password Visibility"
                     )
                 }
             },
-            visualTransformation = if(passwordVisibility) VisualTransformation.None
+            visualTransformation = if (passwordVisibility) VisualTransformation.None
             else PasswordVisualTransformation()
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
         OutlinedTextField(
-            value = password2,
-            onValueChange = {
-                password2 = it
-            },
-            label = {
-                Text(text = "Confirm Password")
-            },
+            value = confirmPassword,
+            onValueChange = { confirmPassword = it },
+            label = { Text(text = "Confirm Password") },
             trailingIcon = {
-                IconButton(onClick = {
-                    passwordVisibility = !passwordVisibility
-                }) {
+                IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
                     Icon(
                         painter = icon,
-                        contentDescription = "Visibility Icon"
+                        contentDescription = "Toggle Password Visibility"
                     )
                 }
             },
-            visualTransformation = if(passwordVisibility) VisualTransformation.None
+            visualTransformation = if (passwordVisibility) VisualTransformation.None
             else PasswordVisualTransformation()
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         Button(
             modifier = Modifier.width(280.dp),
-            enabled = authState.value != AuthState.Loading,
+            enabled = email.isNotEmpty() && password.isNotEmpty() && confirmPassword == password,
             onClick = {
-                authViewModel.signup(email, password, password2)
-            }) {
-            Text(text = "Create")
+                authViewModel.signup(email, password, confirmPassword)
+            }
+        ) {
+            Text(text = "Create Account")
         }
 
-        Spacer(modifier = Modifier.height(6.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         TextButton(
-            enabled = authState.value != AuthState.Loading,
+            enabled = authState != AuthState.Loading,
             onClick = {
                 navController.navigate("login")
-            }) {
-            Text(text = "Allready have an account, Login")
+            }
+        ) {
+            Text(text = "Already have an account? Login")
         }
     }
 }

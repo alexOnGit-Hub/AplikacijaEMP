@@ -5,15 +5,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.aplikacijaemp.R
 
 data class BottomNavItem(val route: String, val label: String, val icon: Int)
 
 @Composable
 fun BottomBar(navController: NavController) {
     val items = listOf(
-        BottomNavItem("home", "Home", android.R.drawable.ic_menu_view),
-        BottomNavItem("cart", "Cart", android.R.drawable.ic_menu_add),
-        BottomNavItem("profile", "Profile", android.R.drawable.ic_menu_myplaces)
+        BottomNavItem("home", "Home", R.drawable.home),
+        BottomNavItem("cart", "Cart", R.drawable.cart),
+        BottomNavItem("profile", "Profile", R.drawable.profile)
     )
 
     NavigationBar {

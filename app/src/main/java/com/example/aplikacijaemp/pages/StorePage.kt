@@ -1,29 +1,31 @@
 package com.example.aplikacijaemp.pages
 
-import androidx.compose.foundation.layout.*
+import DatabaseHelper
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.aplikacijaemp.AuthViewModel
+import com.example.aplikacijaemp.database.StoreItem
 import com.example.aplikacijaemp.navigation.BottomBar
-
-// Data class for store items
-data class StoreItem(
-    val id: Int,
-    val name: String,
-    val price: Double
-)
 
 @Composable
 fun StorePage(
@@ -31,19 +33,15 @@ fun StorePage(
     navController: NavController,
     authViewModel: AuthViewModel
 ) {
-    val authState = authViewModel.authState.observeAsState()
+    val context = LocalContext.current
+    val dbHelper = DatabaseHelper(context)
 
-    val sampleItems = listOf(
-        StoreItem(1, "Smartphone", 699.99),
-        StoreItem(2, "Laptop", 1299.99),
-        StoreItem(3, "Headphones", 199.99),
-        StoreItem(4, "Camera", 499.99)
-    )
+    val userEmail = authViewModel.getUserEmail()
 
-    val cart = remember { mutableStateListOf<StoreItem>() }
+    val items = dbHelper.getAllStoreItems()
 
     Scaffold(
-        bottomBar = { BottomBar(navController) } // Add BottomBar here
+        bottomBar = { BottomBar(navController) }
     ) { innerPadding ->
         Column(
             modifier = modifier
@@ -54,21 +52,31 @@ fun StorePage(
         ) {
             Text(
                 text = "Store Page",
-                modifier = Modifier.padding(16.dp),
-                color = Color.Black
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+                    .size(30.dp),
+                color = Color.Black,
             )
 
             LazyColumn(
-                modifier = Modifier.weight(1f).fillMaxWidth(),
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(sampleItems) { item ->
-                    StoreItemCard(item = item, onAddToCartClick = { addedItem ->
-                        cart.add(addedItem)
-                    })
+                items(items) { item ->
+                    StoreItemCard(
+                        item = item,
+                        onAddToCartClick = { addedItem ->
+                            if (userEmail != null) {
+                                dbHelper.addToCart(storeItemId = addedItem.id, userEmail = userEmail, quantity = 1)
+                            } else {
+                            }
+                        }
+                    )
                 }
             }
-
         }
     }
 }
