@@ -191,7 +191,7 @@ fun CartItemCard(
 @Preview(showBackground = true)
 @Composable
 fun PreviewCartPage() {
-    val authViewModel = AuthViewModel() // Assuming this has the current user
+    val authViewModel = AuthViewModel() 
     val navController = rememberNavController()
 
     CartPage(modifier = Modifier, navController = navController, authViewModel = authViewModel)

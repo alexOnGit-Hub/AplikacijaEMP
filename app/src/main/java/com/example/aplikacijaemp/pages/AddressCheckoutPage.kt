@@ -69,7 +69,6 @@ fun AddressCheckoutPage(
     val postalCode = remember { mutableStateOf("") }
     val addressExists = remember { mutableStateOf(false) }
 
-    // Track if the address input should be shown
     val showAddressInput = remember { mutableStateOf(false) }
 
     LaunchedEffect(userEmail) {

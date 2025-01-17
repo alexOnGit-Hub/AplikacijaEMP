@@ -67,21 +67,21 @@ fun PaymentPage(
             ) {
                 PaymentOptionWithIcon(
                     text = "Credit Card",
-                    iconResId = R.drawable.ic_credit_card, // Replace with your credit card icon resource
+                    iconResId = R.drawable.ic_credit_card, 
                     isSelected = selectedPaymentMethod.value == PaymentMethod.CREDIT_CARD,
                     onSelected = { selectedPaymentMethod.value = PaymentMethod.CREDIT_CARD }
                 )
 
                 PaymentOptionWithIcon(
                     text = "PayPal",
-                    iconResId = R.drawable.ic_paypal, // Replace with your PayPal icon resource
+                    iconResId = R.drawable.ic_paypal, 
                     isSelected = selectedPaymentMethod.value == PaymentMethod.PAYPAL,
                     onSelected = { selectedPaymentMethod.value = PaymentMethod.PAYPAL }
                 )
 
                 PaymentOptionWithIcon(
                     text = "Google Pay",
-                    iconResId = R.drawable.ic_google_pay, // Replace with your Google Pay icon resource
+                    iconResId = R.drawable.ic_google_pay, 
                     isSelected = selectedPaymentMethod.value == PaymentMethod.GOOGLE_PAY,
                     onSelected = { selectedPaymentMethod.value = PaymentMethod.GOOGLE_PAY }
                 )
@@ -133,7 +133,7 @@ fun PaymentOptionWithIcon(
             selected = isSelected,
             onClick = onSelected,
             colors = RadioButtonDefaults.colors(
-                selectedColor = Color(0xFF33A1FF), // Blue for selected
+                selectedColor = Color(0xFF33A1FF), 
                 unselectedColor = Color.Gray
             )
         )

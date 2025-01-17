@@ -8,23 +8,18 @@ import com.google.firebase.auth.FirebaseAuth
 class AuthViewModel : ViewModel() {
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
-    // LiveData to observe authentication state changes
     private val _authState = MutableLiveData<AuthState>()
     val authState: LiveData<AuthState> = _authState
 
-    // Store the user's email locally (as a variable)
     private var userEmail: String? = null
 
     init {
-        // Check authentication status when the ViewModel is created
         checkAuthStatus()
     }
 
-    // Function to check the current authentication status
     private fun checkAuthStatus() {
         val currentUser = auth.currentUser
         if (currentUser != null) {
-            // Store the user's email after successful login or signup
             userEmail = currentUser.email
             _authState.value = AuthState.Authenticated(userEmail ?: "Unknown")
         } else {
@@ -49,13 +44,12 @@ class AuthViewModel : ViewModel() {
             return
         }
 
-        _authState.value = AuthState.Loading // Start loading before making the request
+        _authState.value = AuthState.Loading 
 
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val user = auth.currentUser
-                    // Store the user's email locally after successful signup
                     userEmail = user?.email
                     _authState.value = AuthState.Authenticated(userEmail ?: "Unknown")
                 } else {
@@ -71,13 +65,12 @@ class AuthViewModel : ViewModel() {
             return
         }
 
-        _authState.value = AuthState.Loading // Start loading before making the request
+        _authState.value = AuthState.Loading 
 
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val user = auth.currentUser
-                    // Store the user's email locally after successful login
                     userEmail = user?.email
                     _authState.value = AuthState.Authenticated(userEmail ?: "Unknown")
                 } else {
@@ -89,7 +82,7 @@ class AuthViewModel : ViewModel() {
     // Sign out function
     fun signout() {
         auth.signOut()
-        userEmail = null // Clear the stored email when signing out
+        userEmail = null 
         _authState.value = AuthState.Unauthenticated
     }
 }

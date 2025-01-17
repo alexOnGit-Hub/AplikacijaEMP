@@ -89,10 +89,10 @@ fun CheckoutPage(
                 modifier = Modifier
                     .fillMaxWidth(0.85f)
                     .height(45.dp),
-                shape = RoundedCornerShape(12.dp), // Rounded corners for a softer look
+                shape = RoundedCornerShape(12.dp), 
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xF133806D), // A modern purple color
-                    contentColor = Color.White // White text color
+                    containerColor = Color(0xF133806D), 
+                    contentColor = Color.White
                 ),
             ) {
                 Text(text = "Proceed to address")
@@ -107,7 +107,7 @@ fun CardItemCheckout(cartItem: CartItem) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp),
-        shape = RoundedCornerShape(8.dp), // Rounded corners for a smooth appearance
+        shape = RoundedCornerShape(8.dp), 
     ) {
         Row(
             modifier = Modifier
